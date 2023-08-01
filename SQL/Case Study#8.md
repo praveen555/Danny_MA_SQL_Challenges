@@ -20,11 +20,46 @@ order by month_year
 
 Let us analyse few things before we make comment
 1. number of records per year
+
+   
    ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/4eae8d37-794b-4ef9-8302-364b84f9fc74)
 
-2. month wise count per year
+3. month wise count per year
 
-![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/b51f161d-b194-4f7d-bc40-fc8bd20fc43d)
+   ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/b51f161d-b194-4f7d-bc40-fc8bd20fc43d)
 
 On the primary note, interest id is what would matter the most. While I did try to find ways using the ranking there wasn't any specific pattern i obsereved. Hence it is better to drop the null data. Overall there 1194 rows with null data account to 8% data loss. 
+
+4. How many interest_id values exist in the fresh_segments.interest_metrics table but not in the fresh_segments.interest_map table? What about the other way around?
+
+   Do a left join
+
+   ```
+   select count(interest_id),count(*) from interest_metrics
+   left join interest_map on interest_metrics.interest_id=interest_map.id
+   ```
+   ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/99fba271-119c-4a17-8a4d-15f11d7648e1)
+
+   out of 14273 records 13080 records have common keys from interest_metrics. The reamining 1193 are null values of interest_id.
+
+   Do right join
+   ```
+   select count(id),count(*) from interest_metrics
+   right join interest_map on interest_metrics.interest_id=interest_map.id
+   ```
+   ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/94dd7f4f-1fd1-4905-870c-da93ea56bbf3)
+
+   all the keys present in interest_map are also present in interest_metrics as we see no difference.
+
+5. Summarise the id values in the fresh_segments.interest_map by its total record count in this table
+
+   ```
+   select id,count(id) as total_count from interest_map
+   group by id
+   order by total_count ASC, id;
+   ```
+   ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/1cdd0190-9e58-4e98-860c-bc3e2d59c653)
+
+   All the records have exactly one count, which means there is no duplication. This could also be checked using a where clause to see if the total count >1 for       any record
+
 
