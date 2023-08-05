@@ -2,6 +2,8 @@
 
 ## Data Cleaning
 
+This is a more step by step guide instead of single query. 
+
 1. Convert the week_date to a DATE format
 
 ```
