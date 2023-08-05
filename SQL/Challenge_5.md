@@ -1,5 +1,7 @@
 ## Data Mart Challenge #5
 
+## Data Cleaning
+
 1. Convert the week_date to a DATE format
 
 ```
@@ -55,6 +57,78 @@ set month_number=month(week_date);
 
 5. Add a new column called age_band after the original segment column using the following mapping on the number inside the segment value
    
+```
+alter table weekly_sales
+add age_band varchar(50) ;
+
+update weekly_sales
+set age_band= case
+when segment="null" then NULL
+when substring(segment,2,2)='1' then "Young Adults"
+when substring(segment,2,2)='2' then "Middle Age"
+when substring(segment,2,2)='3' or substring(segment,2,2)=4 then "Retriees"
+else NULL
+end;
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/e6d5c09b-0ffe-4e8f-a310-c12d30bbab8d)
+
+6. Add a new demographic column using the following mapping for the first letter in the segment values
+
+```
+alter table weekly_sales
+add demographics varchar(50) ;
+
+update weekly_sales
+set demographics= case
+when segment="null" then NULL
+when substring(segment,1,1)='C' then "Couples"
+when substring(segment,1,1)='F' then "Family"
+else NULL
+end;
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/6c3ceb1f-015f-4381-9323-659f5406b43f)
+
+7. Ensure all null string values with an "unknown" string value in the original segment column as well as the new age_band and demographic columns
+
+```
+   alter table weekly_sales
+   modify segment varchar(20);
+   
+   update weekly_sales
+   set segment= case
+   when segment="null" then "unkown"
+   else segment
+   end,
+   demographics=case
+   when demographics is null then "unkown"
+   else demographics
+   end,
+   age_band=case
+   when age_band is null then "unkown"
+   else age_band
+   end;
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/cbc87b4b-9eab-4c3d-88b5-31f856ab89d8)
+
+Note- Make sure to increase the column length of segment as it was initially in the size of only 4. 
+
+8. Generate a new avg_transaction column as the sales value divided by transactions rounded to 2 decimal places for each record
+
+```
+alter table weekly_sales
+add  avg_transaction float;
+
+update weekly_sales
+set avg_transaction= round(sales/transactions,2)
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/7fc5959d-3f6a-4423-b9cd-5c4c9b557bf3)
+
+
+
+
+
+
+
 
 
 
