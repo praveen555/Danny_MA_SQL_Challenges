@@ -127,7 +127,7 @@ set avg_transaction= round(sales/transactions,2)
 
 
 Note : I initally did not bother to order the columns as it does not matter much in my opinion however for visibility sake and to follow the question instructions I created a temporary table to order it as it seems easiers. In Pandas you choose the columns in the order to reorganize the dataframe.
-You can chose to persist this temporary table in this ordered format if you want to. I however chose not to as it does not make a difference in the further analysis. Since I have broken down steps my table persists even when the connection is broken or I quit the application. 
+You can chose to persist this temporary table in this ordered format if you want to. I however chose not to as it does not make a difference in the further analysis. Since I have broken down steps my table persists even when the connection is broken or I quit the application. While it is always recommended to create a backup table and work on the new table. 
 
 ```
 create temporary table temp_weekly_sales as 
