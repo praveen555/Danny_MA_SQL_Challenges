@@ -121,8 +121,20 @@ add  avg_transaction float;
 update weekly_sales
 set avg_transaction= round(sales/transactions,2)
 ```
-![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/7fc5959d-3f6a-4423-b9cd-5c4c9b557bf3)
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/48e9c8cd-d876-4633-ad88-3d1a29a2307e)
 
+
+Note : I initally did not bother to order the columns as it does not matter much in my opinion however for visibility sake and to follow the question instructions I created a temporary table to order it as it seems easiers. In Pandas you choose the columns in the order to reorganize the dataframe.
+
+```
+create temporary table temp_weekly_sales as 
+select week_date,week_number,month_number,calendar_year,segment,age_band,demographics,region
+platform,customer_type,transactions,sales,avg_transaction from weekly_sales;
+
+select * from temp_weekly_sales;
+```
+
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/2badc1fa-8994-453a-9587-508f59b80769)
 
 
 
