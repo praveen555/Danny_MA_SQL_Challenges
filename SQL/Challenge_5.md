@@ -155,10 +155,11 @@ select week_date, dayofweek(week_date) as day_of_week from weekly_sales;
 3. How many total transactions were there for each year in the dataset?
 
 ```
-select calendar_year,count(transactions) as count_transaction from weekly_sales
+select calendar_year,sum(transactions) as count_transaction from weekly_sales
 group by calendar_year;
 ```
-![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/286f5d12-d2b4-4e2c-984f-dce0f0e8294a)
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/33edeec1-9744-4a2f-ab67-3b46685669c2)
+
 
 4.What is the total sales for each region for each month?
 
@@ -173,12 +174,11 @@ order by calendar_year desc,month_number desc,monthly_sales desc;
 5. What is the total count of transactions for each platform
 
 ```
-select platform,sum(transactions) as total_amount,count(transactions) as count_transactions from weekly_sales
+select platform,sum(transactions) as total_count from weekly_sales
 group by platform
-order by total_amount desc;
+order by total_count desc;
 ```
-![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/164f9480-3546-4558-8245-2d43dd95d293)
-
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/b186cf43-467e-4a57-bfa9-59e3c925d728)
 
 
 6. What is the percentage of sales for Retail vs Shopify for each month?
@@ -186,34 +186,48 @@ order by total_amount desc;
 ```
 with cte1 as 
 (
-select calendar_year, month_number,platform,sum(transactions) as monthly_amount from weekly_sales
+select calendar_year, month_number,platform,sum(sales) as monthly_amount from weekly_sales
 group by calendar_year,month_number,platform
 ),
 cte2 as 
 (
-select calendar_year,month_number as mnt, sum(transactions) as total_month_sales from weekly_sales
+select calendar_year,month_number as mnt, sum(sales) as total_month_sales from weekly_sales
 group by calendar_year,month_number
 )
 select cte2.calendar_year,cte2.mnt,platform, round((monthly_amount/total_month_sales)*100,2) as percentage_sales from cte2 
 inner join cte1 on cte1.calendar_year=cte2.calendar_year and cte1.month_number=cte2.mnt;
 ```
-![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/be50df25-b5cc-4bae-983c-efb63c3c3552)
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/bb51fdd5-3069-4819-8dfc-9cb3b49efe35)
+
 
 7.What is the percentage of sales by demographic for each year in the dataset?
 
 ```
 with cte1 as 
-( select calendar_year, sum(transactions) as amount from weekly_sales
+( select calendar_year, sum(sales) as amount from weekly_sales
 group by calendar_year
 ),
 cte2 as 
-( select calendar_year,demographics,sum(transactions) as cat_sales from weekly_sales
+( select calendar_year,demographics,sum(sales) as cat_sales from weekly_sales
 group by calendar_year,demographics
 )
 select cte1.calendar_year,demographics,round((cat_sales/amount)*100,2) as percentage_sales from cte2
 inner join cte1 on cte1.calendar_year=cte2.calendar_year;
 ```
-![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/8396f5fb-27ad-4b30-9cc3-76c6d9d955b0)
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/0a5553a9-e2f0-4082-a36f-9da30ab5d5b3)
+
+8. Which age_band and demographic values contribute the most to Retail sales?
+
+```
+select age_band,demographics,sum(sales) as total_sales from weekly_sales
+where platform="Retail"
+group by age_band,demographics
+order by total_sales DESC
+LIMIT 1;
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/a9df329b-d0fc-4a67-80e7-c8d9d3ab1167)
+
+
 
 
 
