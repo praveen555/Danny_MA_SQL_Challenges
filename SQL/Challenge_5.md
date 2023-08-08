@@ -173,11 +173,13 @@ order by calendar_year desc,month_number desc,monthly_sales desc;
 5. What is the total count of transactions for each platform
 
 ```
-select platform,sum(transactions) as total_amount from weekly_sales
+select platform,sum(transactions) as total_amount,count(transactions) as count_transactions from weekly_sales
 group by platform
 order by total_amount desc;
 ```
-![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/6fb62cbe-b760-4563-98e0-96c117bef914)
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/164f9480-3546-4558-8245-2d43dd95d293)
+
+
 
 6. What is the percentage of sales for Retail vs Shopify for each month?
 
