@@ -155,10 +155,10 @@ select week_date, dayofweek(week_date) as day_of_week from weekly_sales;
 3. How many total transactions were there for each year in the dataset?
 
 ```
-select calendar_year,sum(transactions) as count_transaction from weekly_sales
+select calendar_year,sum(transactions) as total_transaction from weekly_sales
 group by calendar_year;
 ```
-![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/33edeec1-9744-4a2f-ab67-3b46685669c2)
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/a50d2c91-e3c8-439d-98f3-c7ec24eaaf2f)
 
 
 4.What is the total sales for each region for each month?
