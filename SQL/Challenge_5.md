@@ -255,12 +255,9 @@ LIMIT 1;
 Averaging the already average value will not present accurate results. More accurate would be to do group by sum for each platform year wise and find the average per year. 
 
 ```
-with cte1 as 
-(
-select calendar_year, platform, sum(sales) as total_sales,sum(transactions) as total_transactions from weekly_sales
+select calendar_year, platform, sum(sales) as total_sales,sum(transactions) as total_transactions, round(sum(sales)/sum(transactions),2) as avg_transactions from weekly_sales
 group by calendar_year, platform
-)
-select *, round(total_sales/total_transactions,2) as avg_transactions from cte1;
+
 ```
 
 ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/5f72cfd5-3538-4139-98cd-40e0a024ca40)
