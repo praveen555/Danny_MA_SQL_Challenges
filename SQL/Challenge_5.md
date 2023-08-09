@@ -29,7 +29,7 @@ alter table weekly_sales
 add week_number int ;
 
 update weekly_sales
-set week_number=week(week_date);
+set week_number=weekofyear(week_date);
 
 ```
 ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/d2d727bd-7265-4ced-a856-138ba2943140)
@@ -150,8 +150,31 @@ select week_date, dayofweek(week_date) as day_of_week from weekly_sales;
 
 2. What range of week numbers are missing from the dataset?
 
+This more of a lenghtly solution but the first naive one I could come up with. I will update this as I progress with a better one. The temporary table was generated with the help of ChatGPT was not written manually. 
+
 ```
+CREATE TEMPORARY TABLE temp_numbers (
+    number INT
+);
+
+INSERT INTO temp_numbers (number)
+VALUES
+    (1), (2), (3), (4), (5), (6), (7), (8), (9), (10),
+    (11), (12), (13), (14), (15), (16), (17), (18), (19), (20),
+    (21), (22), (23), (24), (25), (26), (27), (28), (29), (30),
+    (31), (32), (33), (34), (35), (36), (37), (38), (39), (40),
+    (41), (42), (43), (44), (45), (46), (47), (48), (49), (50),
+    (51), (52);
+    
+
+select distinct(number) as week_number from temp_numbers
+left join weekly_sales on temp_numbers.number=weekly_sales.week_number
+where week_number is null
+order by number;
 ```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/79dc8921-9eef-41f1-9608-3cd3d7c63261)
+
+
 3. How many total transactions were there for each year in the dataset?
 
 ```
@@ -227,6 +250,20 @@ LIMIT 1;
 ```
 ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/a9df329b-d0fc-4a67-80e7-c8d9d3ab1167)
 
+9. Can we use the avg_transaction column to find the average transaction size for each year for Retail vs Shopify? If not - how would you calculate it instead?
+
+Averaging the already average value will not present accurate results. More accurate would be to do group by sum for each platform year wise and find the average per year. 
+
+```
+with cte1 as 
+(
+select calendar_year, platform, sum(sales) as total_sales,sum(transactions) as total_transactions from weekly_sales
+group by calendar_year, platform
+)
+select *, round(total_sales/total_transactions,2) as avg_transactions from cte1;
+```
+
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/5f72cfd5-3538-4139-98cd-40e0a024ca40)
 
 
 
