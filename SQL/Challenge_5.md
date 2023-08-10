@@ -265,7 +265,33 @@ group by calendar_year, platform
 
 
 
+## 3. Before & After Analysis
 
+1. What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?
+
+Initially I did interval +4 week until i had to look into the question again understand. Take away lesson is the spend some time understanding the questions as it is not always straightforward as it seems. 
+
+Also i think I love CTE. This query break down everything from a beginners presepctive. I will try to optimize it in future. 
+
+```
+-- What is the total sales for the 4 weeks before and after 2020-06-15? What is the growth or reduction rate in actual values and percentage of sales?
+with cte1 as 
+(
+select sum(sales) as after_sales from weekly_sales
+where  (week_date>='2020-06-15' and week_date <= DATE_ADD('2020-06-15',INTERVAL 3 WEEK))
+),
+cte2 as 
+(select sum(sales) as before_sales from weekly_sales
+where (week_date<'2020-06-15' and week_date >= date_sub('2020-06-15', interval 4 week))
+),
+cte3 as 
+(
+select * from cte1
+join cte2 on 1=1
+)
+select before_sales,after_sales,after_sales-before_sales as difference_in_sales,round(((after_sales-before_sales)/before_sales)*100,2) as pct_change from cte3;
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/5297493e-89fa-423f-869e-8e0b3eceae5f)
 
 
 
