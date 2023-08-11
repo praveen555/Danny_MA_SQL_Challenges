@@ -373,7 +373,117 @@ My thoughts on this :
 ## Final thoughts
 ## 3. Introducing sustainable packaging in June 2020 lead to increased after sales due to which the difference in sales got reduced. If the company did not do the change there might as well a high difference in year 2020 leading to decreased sales as we might expect the difference to be close to  -25% as indicated in the previous 2 years of 2018 & 2019. 
 
-## Feedback and thoughts on this is welcome :). Hope you had a good learning and fun session as I did. 
+## Feedback and thoughts on this is welcome :).
+
+
+## Part D : Bonus questions 
+
+1. By region
+
+```
+with cte1 as 
+(
+select region,sum(sales) as after_sales from weekly_sales
+where  (week_date>='2020-06-15' and week_date <= DATE_ADD('2020-06-15',INTERVAL 11 WEEK))
+group by region
+),
+cte2 as 
+(select region as rg,sum(sales) as before_sales from weekly_sales
+where (week_date<'2020-06-15' and week_date >= date_sub('2020-06-15', interval 12 week))
+group by region
+),
+cte3 as 
+(
+select * from cte1
+join cte2 on cte2.rg=cte1.region
+)
+select region,before_sales,after_sales,after_sales-before_sales as difference_in_sales,round(((after_sales-before_sales)/before_sales)*100,2) as pct_change from cte3
+order by pct_change asc
+```
+
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/047ebaac-a2e5-4b15-ba3d-e4269a01b623)
+
+2. 
+```
+with cte1 as 
+(
+select platform,sum(sales) as after_sales from weekly_sales
+where  (week_date>='2020-06-15' and week_date <= DATE_ADD('2020-06-15',INTERVAL 11 WEEK))
+group by platform
+),
+cte2 as 
+(select platform as rg,sum(sales) as before_sales from weekly_sales
+where (week_date<'2020-06-15' and week_date >= date_sub('2020-06-15', interval 12 week))
+group by platform
+),
+cte3 as 
+(
+select * from cte1
+join cte2 on cte2.rg=cte1.platform
+)
+select platform,before_sales,after_sales,after_sales-before_sales as difference_in_sales,round(((after_sales-before_sales)/before_sales)*100,2) as pct_change from cte3
+order by pct_change asc
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/c28eecc4-96c7-479f-93e9-fcc821f7cd36)
+
+## Note that 2020 was peak covid time retail shops suffered a lot. 
+
+3. 
+```
+with cte1 as 
+(
+select age_band,sum(sales) as after_sales from weekly_sales
+where  (week_date>='2020-06-15' and week_date <= DATE_ADD('2020-06-15',INTERVAL 11 WEEK))
+group by age_band
+),
+cte2 as 
+(select age_band as rg,sum(sales) as before_sales from weekly_sales
+where (week_date<'2020-06-15' and week_date >= date_sub('2020-06-15', interval 12 week))
+group by age_band
+),
+cte3 as 
+(
+select * from cte1
+join cte2 on cte2.rg=cte1.age_band
+)
+select age_band,before_sales,after_sales,after_sales-before_sales as difference_in_sales,round(((after_sales-before_sales)/before_sales)*100,2) as pct_change from cte3
+order by pct_change asc
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/1b1e0ec0-00f7-4fca-b18c-569e4cbbd832)
+
+Which age category cares most of the planet ? 
+
+
+4. 
+```
+with cte1 as 
+(
+select demographics,sum(sales) as after_sales from weekly_sales
+where  (week_date>='2020-06-15' and week_date <= DATE_ADD('2020-06-15',INTERVAL 11 WEEK))
+group by demographics
+),
+cte2 as 
+(select demographics as rg,sum(sales) as before_sales from weekly_sales
+where (week_date<'2020-06-15' and week_date >= date_sub('2020-06-15', interval 12 week))
+group by demographics
+),
+cte3 as 
+(
+select * from cte1
+join cte2 on cte2.rg=cte1.demographics
+)
+select demographics,before_sales,after_sales,after_sales-before_sales as difference_in_sales,round(((after_sales-before_sales)/before_sales)*100,2) as pct_change from cte3
+order by pct_change asc
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/348a4d5f-d6e6-4629-9911-635b826674ed)
+
+
+5. ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/84ec6502-004e-4697-994f-a426c1e3801a)
+
+   Data Mart found new customers interested in sustainable packaging which could have lead to increased after sales.
+
+
+
 
 
 
