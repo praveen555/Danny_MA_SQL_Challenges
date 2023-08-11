@@ -294,6 +294,94 @@ select before_sales,after_sales,after_sales-before_sales as difference_in_sales,
 ![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/5297493e-89fa-423f-869e-8e0b3eceae5f)
 
 
+2. What about the entire 12 weeks before and after?
+
+Simply change the interval duration from the previous query 
+
+```
+with cte1 as 
+(
+select sum(sales) as after_sales from weekly_sales
+where  (week_date>='2020-06-15' and week_date <= DATE_ADD('2020-06-15',INTERVAL 11 WEEK))
+),
+cte2 as 
+(select sum(sales) as before_sales from weekly_sales
+where (week_date<'2020-06-15' and week_date >= date_sub('2020-06-15', interval 12 week))
+),
+cte3 as 
+(
+select * from cte1
+join cte2 on 1=1
+)
+select before_sales,after_sales,after_sales-before_sales as difference_in_sales,round(((after_sales-before_sales)/before_sales)*100,2) as pct_change from cte3;
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/2807dc51-25f1-4fe0-a3c2-34ed2c888876)
+
+
+3. How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?
+
+Note- While cross checking my answers I found several github repos using week_number as way to filter it and using the same 
+week_number to filter across the years of 2019 & 2018. However a quick analysis below reveals that the week_number for the 
+years in 2018 and 2019 change to 24 instead of 25. 
+
+```
+select weekofyear('2018-06-15'), weekofyear('2019-06-15'),weekofyear('2020-06-15')
+```
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/6c328d1b-f19f-4eba-ab8e-87891a09d4ae)
+
+hence using 25 as base week_number if we do +12 we get 37 week_number which is right for year 2020. However for year 2018 and 2019
+the week_number is 24 and doing +12 weeks will give us 36 week_number for after sales. 
+
+for before sales 25-12= 13 is right for 2020 however for 2018/19 it should be 24-12=12. The same goes for 4 week period. 
+
+Hence the correct results I believe is this :
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/bd1cd002-7b52-4476-b105-081474094c6b)
+
+```
+-- How do the sale metrics for these 2 periods before and after compare with the previous years in 2018 and 2019?
+with cte1 as 
+(
+select calendar_year,sum(sales) as after_sales from weekly_sales
+ where  (week_date>='2018-06-15' and week_date <= DATE_ADD('2018-06-15',INTERVAL 3 WEEK))
+ or (week_date>='2019-06-15' and week_date <= DATE_ADD('2019-06-15',INTERVAL 3 WEEK))
+ or  (week_date>='2020-06-15' and week_date <= DATE_ADD('2020-06-15',INTERVAL 3 WEEK))
+ group by calendar_year
+),
+cte2 as 
+(select calendar_year as yr, sum(sales) as before_sales from weekly_sales
+where (week_date<'2018-06-15' and week_date >= date_sub('2018-06-15', interval 4 week)) 
+or (week_date<'2019-06-15' and week_date >= date_sub('2019-06-15', interval 4 week)) 
+or (week_date<'2020-06-15' and week_date >= date_sub('2020-06-15', interval 4 week))
+group by calendar_year 
+),
+cte3 as 
+(
+select * from cte1
+join cte2 on cte1.calendar_year=cte2.yr
+)
+select calendar_year,before_sales,after_sales,after_sales-before_sales as difference_in_sales,round(((after_sales-before_sales)/before_sales)*100,2) as pct_change from cte3; 
+```
+If we change the values of interval to 11 and 12 we get the 4 week period
+![image](https://github.com/praveen555/Danny_MA_SQL_Challenges/assets/23379996/52939378-f81e-4443-a726-d866c6232ab1)
+
+My thoughts on this :
+
+1. The general trend observed is the the 4 week period more sales happen in the first half of year (though we technically looking 1 month before and after)
+2. A general observation again from the table is that a sales happen more in the first quater of the year than in the second quater. e.g. we are looking
+   for range between mid Feb (15th Feb) to mid june (15th June). After that the sales decrease for the next quater.
+
+Final thoughts
+## 3. Introducing sustainable packaging in June 2020 lead to increased after sales due to which the difference in sales got reduced. If the company did not 
+## do the change there might as well a high difference in year 2020 leading to decreased sales as we might expect the difference to be close to  -25% as indicated in the previous 2 years of 2018 & 2019. 
+
+Feedback and thoughts on this is welcome :). Hope you had a good learning and fun session as I did. 
+
+
+
+
+
+   
+
 
 
 
