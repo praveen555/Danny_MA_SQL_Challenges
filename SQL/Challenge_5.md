@@ -370,11 +370,10 @@ My thoughts on this :
 2. A general observation again from the table is that a sales happen more in the first quater of the year than in the second quater. e.g. we are looking
    for range between mid Feb (15th Feb) to mid june (15th June). After that the sales decrease for the next quater.
 
-Final thoughts
-## 3. Introducing sustainable packaging in June 2020 lead to increased after sales due to which the difference in sales got reduced. If the company did not 
-## do the change there might as well a high difference in year 2020 leading to decreased sales as we might expect the difference to be close to  -25% as indicated in the previous 2 years of 2018 & 2019. 
+## Final thoughts
+## 3. Introducing sustainable packaging in June 2020 lead to increased after sales due to which the difference in sales got reduced. If the company did not do the change there might as well a high difference in year 2020 leading to decreased sales as we might expect the difference to be close to  -25% as indicated in the previous 2 years of 2018 & 2019. 
 
-Feedback and thoughts on this is welcome :). Hope you had a good learning and fun session as I did. 
+## Feedback and thoughts on this is welcome :). Hope you had a good learning and fun session as I did. 
 
 
 
